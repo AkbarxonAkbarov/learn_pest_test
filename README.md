@@ -9,7 +9,6 @@ Laravel loyihasini ishga tushirish uchun quyidagi dasturlar o'rnatilgan bo'lishi
 - PHP >= 8.1
 - Composer
 - MySQL yoki boshqa ma'lumotlar bazasi serveri
-- Node.js (yordamchi asboblar uchun, masalan, Laravel Mix)
 - Git
 
 ## O'rnatish
