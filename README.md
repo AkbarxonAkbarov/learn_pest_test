@@ -20,8 +20,8 @@ Laravel loyihasini ishga tushirish uchun quyidagi dasturlar o'rnatilgan bo'lishi
    cd <repository-folder>
 
 ## Testlarni Ishga Tushirish
-1. pestphp kutubxonasini o'rnatish: ```bash 
+1. pestphp kutubxonasini o'rnatish: 
     composer require pestphp/pest --dev
-2. Testlarni ishga tushirish uchun quyidagi buyruqdan foydalaning: ```bash
+2. Testlarni ishga tushirish uchun quyidagi buyruqdan foydalaning:
     php artisan test
 
