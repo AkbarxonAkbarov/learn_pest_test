@@ -1,7 +1,5 @@
 <?php
 
-use Tests\TestCase;
-//  use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\User;
 use App\Models\Author;
 
