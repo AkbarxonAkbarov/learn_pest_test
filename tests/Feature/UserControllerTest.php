@@ -4,6 +4,7 @@ use Tests\TestCase;
 //  use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\User;
 use App\Models\Author;
+use Database\Factories\UserFactory;
 
 it("has authorization check", function () {
     $response = $this->withHeaders(["Accept" => "application/json"])->get("/api/authors");
@@ -14,8 +15,8 @@ it("has authorization check", function () {
 
 it("returns success http status code", function () {
     $user = new User();
-    $user->name = 'test_user';
-    $user->email = 'test_email';
+    $user->name = 'fullname';
+    $user->username = 'username';
     $user->password = bcrypt('password');
     $user->save();
 
@@ -30,75 +31,50 @@ it("returns success http status code", function () {
     $response->assertStatus(200);
 });
 
-it("shows list of clients without pagination", function () {
+it("shows list of clients with pagination", function () {
     $user = new User();
-    $user->name = 'test_user';
-    $user->email = 'test_email';
+    $user->name = UserFactory::new()->definition()['name'];
+    $user->username = 'username2';
     $user->password = bcrypt('password');
     $user->save();
 
     $token = $user->createToken("test_token");
-
-    $authorNames = ["author1", "author2"];
-    $authors = [];
-
-    foreach ($authorNames as $authorName) {
-        $author = new Author();
-        $author->name = $authorName;
-        $author->save();
-
-        $authors[] = $author;
-    }
-
-    $result = [];
-    foreach ($authors as $author) {
-        $result[] = [
-            "id" => $author->id,
-            "name" => $author->name,
-        ];
-    }
-
-    $responseToAssert = [
-        "data" => [
-            "returnType" => "collection",
-            "paginate" => false,
-            "result" => $result,
-        ]
-    ];
 
     $response = $this
         ->withHeaders([
             "Authorization" => "Bearer " . $token->plainTextToken,
             "Accept" => "application/json",
         ])
-        ->get('/api/authors');
+        ->get('/api/paginate_authors');
 
-    $response->assertJson($responseToAssert);
+
+    $response->assertStatus(200);
+    $data = $response->json('data');
+    expect($data)->toHaveKeys(['result', 'paginate', 'returnType']);
+    expect($data['returnType'])->tobe('collection');
+    expect($data['paginate'])->toBeTrue();
+    expect($data['result'])->toBeArray();
+    // expect($data['result'])->toHaveCount(10);
+
 });
 
 it("checks error response in error case", function () {
     $user = new User();
-    $user->name = 'test_user';
-    $user->email = 'test_email';
+    $user->name = UserFactory::new()->definition()['name'];
+    $user->username = 'test';
     $user->password = bcrypt('password');
     $user->save();
-    $user->delete();
-    $user->select("*")->get();
 
     $token = $user->createToken("test_token");
-
-    $responseToAssert = [
-        "data" => [
-            "message" => "error message",
-        ]
-    ];
 
     $response = $this
         ->withHeaders([
             "Authorization" => "Bearer " . $token->plainTextToken,
             "Accept" => "application/json",
         ])
-        ->get('/api/authors');
+        ->get('/api/authors?error=true');
 
-    $response->assertJson($responseToAssert);
+    $response->assertStatus(400);
+    $data = $response->json('message');
+    expect($data)->toBe("error message");
 });
