@@ -56,6 +56,7 @@ it("shows list of clients with pagination", function () {
     expect($data['result'])->toBeArray();
     // expect($data['result'])->toHaveCount(10);
 
+
 });
 
 it("checks error response in error case", function () {
@@ -73,7 +74,6 @@ it("checks error response in error case", function () {
             "Accept" => "application/json",
         ])
         ->get('/api/authors?error=true');
-
     $response->assertStatus(400);
     $data = $response->json('message');
     expect($data)->toBe("error message");

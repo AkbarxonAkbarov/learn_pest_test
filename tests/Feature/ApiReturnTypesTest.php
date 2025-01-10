@@ -29,24 +29,3 @@ it('returns string data type', function () {
     ]);
 });
 
-// it('returns number data type', function () {
-
-//     $url = '/api/authors';
-
-//     $response = Http::get($url);
-//     $response->assertStatus(200);
-//     $response->assertJson([
-//         "data" => [
-//             "returnType" => "number",
-//             "paginate" => false,
-//             "result" => 12,
-//             "message" => "Malumotlar saqlandi"
-//         ]
-//     ]);
-// });
-
-// test('example', function () {
-//     $response = $this->get('/');
-
-//     $response->assertStatus(200);
-// });
